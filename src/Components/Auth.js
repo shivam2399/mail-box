@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Auth.css'
-import { Link } from 'react-router-dom';
-
 
 const Auth = () => {
   const emailInputRef = useRef()
@@ -12,6 +11,8 @@ const Auth = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const navigate = useNavigate()
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState)
@@ -64,6 +65,7 @@ const Auth = () => {
   })
   .then((data) => {
     console.log("User successfully logged in")
+    navigate('/welcome')
   })
   .catch((err) => {
     alert(err.message)
@@ -75,9 +77,6 @@ const Auth = () => {
       <nav>
         <div>
           <h1>Mail Box Client</h1>
-          <Link to="/">Home</Link>
-          <Link to="/">About Us</Link>
-          <Link to="/">Products</Link>
         </div>
       </nav>
       <div className="container">

@@ -1,17 +1,25 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Welcome.css';
+import { useSelector } from 'react-redux';
 
-const Welcome = ({ userEmail }) => {
+
+
+
+const Welcome = () => {
+  const email = useSelector(state => state.auth.email)
+
   return (
     <div className="welcome-container">
       <h2>Welcome to Mail Box</h2>
-      <p>Logged in as: {userEmail}</p>
+      <h3>Hello {email}</h3>
       <div className="buttons-container">
         <Link to="/compose">
           <button>Compose Mail</button>
         </Link>
-        <button>Inbox</button>
+        <Link to="/inbox">
+          <button>Inbox</button>
+        </Link>
         <button>Sent Items</button>
       </div>
     </div>

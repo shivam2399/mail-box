@@ -1,18 +1,22 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Auth.css'
+import { authActions } from '../Store/auth';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Auth = () => {
   const emailInputRef = useRef()
   const passwordInputRef = useRef()
   const confirmPasswordInputRef = useRef()
-
+  const dispatch = useDispatch()
+  const loggedIn = useSelector(state => state.auth.isLoggedIn)
+  const navigate = useNavigate()
   
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(loggedIn);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const navigate = useNavigate()
+  
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState)
@@ -64,8 +68,9 @@ const Auth = () => {
     }
   })
   .then((data) => {
-    console.log("User successfully logged in")
+    dispatch(authActions.login({ token: data.idToken, email: data.email }));
     navigate('/welcome')
+
   })
   .catch((err) => {
     alert(err.message)

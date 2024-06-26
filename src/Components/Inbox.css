@@ -1,0 +1,49 @@
+/* Inbox.css */
+
+.inbox-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.loading-text, .error-text {
+    font-size: 16px;
+    color: #666;
+}
+
+.mail-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.mail-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.mail-subject {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.mail-content {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.mail-sender {
+    font-size: 14px;
+    color: #666;
+}

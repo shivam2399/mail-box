@@ -1,23 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { EditorState, convertToRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import axios from 'axios';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './Compose.css';
+import { useSelector } from 'react-redux';
 
 
-const Compose = ({ senderEmail }) => {
+const Compose = () => {
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
-    const [username, setUsername] = useState('');
     const [recipient, setRecipient] = useState('');
     const [subject, setSubject] = useState('');
+    const email = useSelector(state => state.auth.email)
   
-    useEffect(() => {
-      setUsername(senderEmail);
-    }, [senderEmail]);
+    
 
-    const firebaseUrl = 'https://mail-box-c01ff-default-rtdb.asia-southeast1.firebasedatabase.app'; // Replace with your Firebase Realtime Database URL
+    const firebaseUrl = 'https://mail-box-c01ff-default-rtdb.asia-southeast1.firebasedatabase.app';
   
     const onEditorStateChange = (newEditorState) => {
       setEditorState(newEditorState);
@@ -30,16 +29,16 @@ const Compose = ({ senderEmail }) => {
     const handleSendEmail = async () => {
       const emailContent = draftToHtml(convertToRaw(editorState.getCurrentContent()));
   
-      if (!username.trim() || !recipient.trim() || !subject.trim()) {
+      if ( !recipient.trim() || !subject.trim()) {
         alert('All fields are required');
         return;
       }
 
-      const encodedSender = encodeEmail(username);
+      const encodedSender = encodeEmail(email);
       const encodedRecipient = encodeEmail(recipient);
   
       const emailData = {
-        sender: username,
+        sender: email,
         recipient: recipient,
         subject: subject,
         content: emailContent,
@@ -47,14 +46,11 @@ const Compose = ({ senderEmail }) => {
       };
   
       try {
-        // Store email for sender
-        await axios.post(`${firebaseUrl}/emails/sent/${encodedSender}.json`, emailData);
-  
-        // Store email for recipient
-        await axios.post(`${firebaseUrl}/emails/inbox/${encodedRecipient}.json`, emailData);
+        
+        await axios.post(`${firebaseUrl}/users/${encodedSender}/sent.json`, emailData);
+        await axios.post(`${firebaseUrl}/users/${encodedRecipient}/inbox.json`, emailData);
   
         alert('Email sent successfully');
-        setUsername('');
         setRecipient('');
         setSubject('');
         setEditorState(EditorState.createEmpty());
@@ -68,11 +64,11 @@ const Compose = ({ senderEmail }) => {
     return (
       <div className="send-mail-container">
       <input
-        type="text"
-        placeholder="Your email"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
+          type="text"
+          placeholder="Your email"
+          value={email}
+          disabled
+        />
       <input
         type="text"
         placeholder="Recipient email"

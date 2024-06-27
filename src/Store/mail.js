@@ -23,6 +23,13 @@ const mailSlice = createSlice({
         },
         setSent(state, action) {
             state.sent = action.payload;
+        },
+        updateMessageStatus(state, action) {
+            const { messageId, isRead } = action.payload;
+            const message = state.inbox.find(mail => mail.id === messageId);
+            if(message) {
+                message.isRead = isRead;
+            }
         }
     }
 })
@@ -34,7 +41,7 @@ export const fetchInbox = (email) => async (dispatch) => {
     try {
         const encodedEmail = email.replace(/@/g, '_at_').replace(/\./g, '_dot_');
         const response = await axios.get(`https://mail-box-c01ff-default-rtdb.asia-southeast1.firebasedatabase.app/users/${encodedEmail}/inbox.json`);
-        const inboxData = response.data ? Object.values(response.data) : [];
+        const inboxData = response.data ? Object.entries(response.data).map(([id, mail]) => ({ id, ...mail })) : [];
         dispatch(mailActions.setInbox(inboxData));
     } catch (error) {
         dispatch(mailActions.setError(error.message));
@@ -54,6 +61,16 @@ export const fetchSent = (email) => async (dispatch) => {
         dispatch(mailActions.setError(error.message));
     } finally {
         dispatch(mailActions.setLoading(false));
+    }
+};
+
+export const updateMessageStatus = (email, messageId, isRead) => async (dispatch) => {
+    const encodedEmail = email.replace(/@/g, '_at_').replace(/\./g, '_dot_');
+    try {
+        await axios.patch(`https://mail-box-c01ff-default-rtdb.asia-southeast1.firebasedatabase.app/users/${encodedEmail}/inbox/${messageId}.json`, { isRead });
+        dispatch(mailActions.updateMessageStatus({ messageId, isRead }));
+    } catch (error) {
+        dispatch(mailActions.setError(error.message));
     }
 };
 

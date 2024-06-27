@@ -1,9 +1,10 @@
-// Inbox.js
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchInbox } from "../Store/mail";
 import InboxItem from "./InboxItem";
 import './Inbox.css'
+import { Link, Routes, Route } from "react-router-dom";
+import MailDetail from "./MailDetail";
 
 const Inbox = () => {
     const dispatch = useDispatch();
@@ -18,9 +19,16 @@ const Inbox = () => {
         }
     }, [dispatch, email]);
 
+    const unreadCount = inbox.filter(mail => !mail.isRead).length;
+
     return (
         <div className="inbox-container">
-            <h2>Inbox</h2>
+            <div className="inbox-header">
+                <h2>Inbox ({unreadCount} unread)</h2>
+                <Link to="/compose">
+                    <button className="compose-button">Compose</button>
+                </Link>
+            </div>
             {loading && <p className="loading-text">Loading...</p>}
             {error && <p className="error-text">{error}</p>}
             <ul className="mail-list">
@@ -28,6 +36,10 @@ const Inbox = () => {
                     <InboxItem key={index} mail={mail} />
                 ))}
             </ul>
+
+            <Routes>
+                <Route path="/mail/:mailId" element={<MailDetail />} />
+            </Routes>
         </div>
     );
 };

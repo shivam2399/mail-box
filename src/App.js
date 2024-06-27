@@ -1,24 +1,23 @@
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Auth from './Components/Auth';
 import Compose from './Components/Compose';
-import Welcome from './Components/Welcome';
 import Inbox from './Components/Inbox';
-
-const router = createBrowserRouter([
-  {path: '/', element: <Auth />},
-  {path: '/compose', element: <Compose />},
-  {path: '/welcome', element: <Welcome />},
-  {path: '/inbox', element: <Inbox />},
-])
-
+import Welcome from './Components/Welcome';
+import MailDetail from './Components/MailDetail';
 
 function App() {
-  return (
-    <>
-      <RouterProvider router={router} />
-    </>
-  );
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<Auth />} />
+                <Route path="/welcome" element={<Welcome />} />
+                <Route path="/compose" element={<Compose />} />
+                <Route path="/inbox/*" element={<Inbox />} />
+                <Route path="/mail/:mailId" element={<MailDetail />} />
+            </Routes>
+        </Router>
+    );
 }
 
 export default App;

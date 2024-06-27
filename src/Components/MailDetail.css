@@ -1,0 +1,38 @@
+
+.detailed-mail-container {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.detailed-mail-container h2 {
+    margin-top: 0;
+    font-size: 24px;
+    font-weight: 600;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.detailed-mail-container p {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+.detailed-mail-container p strong {
+    font-weight: 600;
+}
+
+.mail-content {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.mail-content p {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}

@@ -15,9 +15,6 @@ const mailSlice = createSlice({
         setLoading(state, action) {
             state.loading = action.payload;
         },
-        setError(state, action) {
-            state.error = action.payload;
-        },
         setInbox(state, action) {
             state.inbox = action.payload;
         },
@@ -30,6 +27,9 @@ const mailSlice = createSlice({
             if(message) {
                 message.isRead = isRead;
             }
+        },
+        deleteMailFromState(state, action) {
+            state.inbox = state.inbox.filter(mail => mail.id !== action.payload)
         }
     }
 })
@@ -47,6 +47,16 @@ export const fetchInbox = (email) => async (dispatch) => {
         dispatch(mailActions.setError(error.message));
     } finally {
         dispatch(mailActions.setLoading(false));
+    }
+};
+
+export const deleteMessage = (email, messageId) => async (dispatch) => {
+    const encodedEmail = email.replace(/@/g, '_at_').replace(/\./g, '_dot_');
+    try {
+        await axios.delete(`https://mail-box-c01ff-default-rtdb.asia-southeast1.firebasedatabase.app/users/${encodedEmail}/inbox/${messageId}.json`);
+        dispatch(mailActions.deleteMailFromState(messageId));
+    } catch (error) {
+        dispatch(mailActions.setError(error.message));
     }
 };
 

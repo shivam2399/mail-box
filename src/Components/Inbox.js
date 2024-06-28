@@ -11,7 +11,6 @@ const Inbox = () => {
     const email = useSelector(state => state.auth.email);
     const inbox = useSelector(state => state.mail.inbox);
     const loading = useSelector(state => state.mail.loading);
-    const error = useSelector(state => state.mail.error);
 
     useEffect(() => {
         if (email) {
@@ -30,7 +29,6 @@ const Inbox = () => {
                 </Link>
             </div>
             {loading && <p className="loading-text">Loading...</p>}
-            {error && <p className="error-text">{error}</p>}
             <ul className="mail-list">
                 {inbox.map((mail, index) => (
                     <InboxItem key={index} mail={mail} />

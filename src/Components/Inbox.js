@@ -1,22 +1,16 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchInbox } from "../Store/mail";
+import React from "react";
+import { useSelector } from "react-redux";
 import InboxItem from "./InboxItem";
 import './Inbox.css'
 import { Link, Routes, Route } from "react-router-dom";
 import MailDetail from "./MailDetail";
+import useFetchEmails from "../hooks/useFetchEmails"
+
 
 const Inbox = () => {
-    const dispatch = useDispatch();
     const email = useSelector(state => state.auth.email);
-    const inbox = useSelector(state => state.mail.inbox);
-    const loading = useSelector(state => state.mail.loading);
+    const { inbox, loading } = useFetchEmails(email)
 
-    useEffect(() => {
-        if (email) {
-            dispatch(fetchInbox(email));
-        }
-    }, [dispatch, email]);
 
     const unreadCount = inbox.filter(mail => !mail.isRead).length;
 

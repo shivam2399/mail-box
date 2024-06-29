@@ -20,7 +20,9 @@ const Welcome = () => {
         <Link to="/inbox">
           <button>Inbox</button>
         </Link>
-        <button>Sent Items</button>
+        <Link to="/sent">
+          <button>Sent Items</button>
+        </Link>
       </div>
     </div>
   );

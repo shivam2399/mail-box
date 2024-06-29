@@ -5,6 +5,7 @@ import Compose from './Components/Compose';
 import Inbox from './Components/Inbox';
 import Welcome from './Components/Welcome';
 import MailDetail from './Components/MailDetail';
+import Sent from './Components/Sent';
 
 function App() {
     return (
@@ -14,7 +15,9 @@ function App() {
                 <Route path="/welcome" element={<Welcome />} />
                 <Route path="/compose" element={<Compose />} />
                 <Route path="/inbox/*" element={<Inbox />} />
-                <Route path="/mail/:mailId" element={<MailDetail />} />
+                <Route path="/sent/*" element={<Sent />} />
+                <Route path="/inbox/:mailId" element={<MailDetail />} />
+                <Route path="/sent/:mailId" element={<MailDetail />} />
             </Routes>
         </Router>
     );

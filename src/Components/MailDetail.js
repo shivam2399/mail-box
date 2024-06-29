@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchInbox, updateMessageStatus } from '../Store/mail';
+import { fetchSent, fetchInbox, updateMessageStatus } from '../Store/mail';
 import './MailDetail.css';
 
 const MailDetail = () => {
@@ -9,23 +9,25 @@ const MailDetail = () => {
     const dispatch = useDispatch();
     const email = useSelector(state => state.auth.email);
     const inbox = useSelector(state => state.mail.inbox);
-    const [mail, setMail] = useState(null, mailId);
+    const sent = useSelector(state => state.mail.sent);
+    const [mail, setMail] = useState(null);
 
     useEffect(() => {
-        if(email) {
-            dispatch(fetchInbox(email))
+        if (email) {
+            dispatch(fetchInbox(email));
+            dispatch(fetchSent(email));
         }
-    }, [dispatch])
+    }, [dispatch]);
 
     useEffect(() => {
-        const selectedMail = inbox.find(m => m.id === mailId);
+        const selectedMail = inbox.find(m => m.id === mailId) || sent.find(m => m.id === mailId);
         if (selectedMail) {
             setMail(selectedMail);
-            if (!selectedMail.isRead) {
+            if (!selectedMail.isRead && inbox.find(m => m.id === mailId)) {
                 dispatch(updateMessageStatus(email, mailId, true));
             }
         }
-    }, [inbox, mailId, dispatch, email]);
+    }, [dispatch]);
 
     if (!mail) {
         return <p>Loading...</p>;
